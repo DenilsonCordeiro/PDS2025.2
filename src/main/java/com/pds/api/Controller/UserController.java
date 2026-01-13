@@ -49,6 +49,7 @@ public class UserController {
         user.setName(req.Name());
         user.setEmail(req.Email());
         user.setPhone(req.Phone());
+        user.setPassword(req.Password());
         
         //retorna usuario
         this.userRepository.save(user);

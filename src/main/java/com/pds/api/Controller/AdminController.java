@@ -2,9 +2,12 @@ package com.pds.api.Controller;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pds.api.Application.UseCases.Auth.AuthenticateUser;
 import com.pds.api.DTO.Organizer.AddEventRequest;
 import com.pds.api.DTO.Organizer.AddEventResponse;
+import com.pds.api.DTO.Organizer.MyEventsResponse;
 import com.pds.api.Domain.Entities.Address;
 import com.pds.api.Domain.Entities.Date;
 import com.pds.api.Domain.Entities.Event;
@@ -55,5 +59,23 @@ public class AdminController {
         System.out.println(event.getAddress().toString());
 
         return ResponseEntity.ok(new AddEventResponse("Evento adicionado com sucesso"));
+    }
+
+    @GetMapping("/my-events")
+    public ResponseEntity<MyEventsResponse> MyEvents(HttpSession session){
+        String Email = (String) session.getAttribute("USER");
+        String Role = this.autheticate.getRole(Email);
+
+        if(!Role.equals("ADMIN")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                 .body(new MyEventsResponse(false,
+                                                            List.of(),
+                                                            "usuario não autorizado"));
+        }
+
+        List<Event> events = this.eventRepository.myEvents(Email);
+
+        return ResponseEntity.ok()
+                             .body(new MyEventsResponse(true, events, "eventos buscados com sucesso"));
     }
 }

@@ -20,7 +20,7 @@ public class Event {
      * - activities: lista de atividades do evento
     */
     private String code;
-    private Admin admin;
+    //private Admin admin;
     private String name;
     private String description;
     private String category;
@@ -35,7 +35,7 @@ public class Event {
      * Construtor da classe
      */
     public Event(
-        Admin admin,
+        //Admin admin,
         String name,
         String description,
         String category,
@@ -45,7 +45,7 @@ public class Event {
         float price
     ) {
         this.setCode(CodeGenerator.generate());
-        this.setAdmin(admin);
+        //this.setAdmin(admin);
         this.setName(name);
         this.setDescription(description);
         this.setCategory(category);
@@ -68,7 +68,7 @@ public class Event {
         this.code = code;
     }
 
-    public Admin getAdmin() {
+    /* public Admin getAdmin() {
         return admin;
     }
 
@@ -76,7 +76,7 @@ public class Event {
         if (admin == null) return;
 
         this.admin = admin;
-    }
+    } */
 
     public String getName() {
         return name;

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.pds.api.Domain.Entities.Admin;
 import com.pds.api.Domain.Entities.User;
 import com.pds.api.Domain.IRepositories.IUserRepository;
 
@@ -27,5 +28,10 @@ public class AuthenticateUser {
 
         return false;
     }
-    
+
+    public String getRole(String email) {
+        return userRepository.findByEmail(email)
+                .map(user -> user instanceof Admin ? "ADMIN" : "PARTICIPANT")
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }    
 }

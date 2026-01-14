@@ -238,7 +238,6 @@ public class Model {
         this.setLoggedUser(admin);
 
         Event event = new Event(
-            admin,
             "Evento 1",
             "Descrição do evento 1",
             "Categoria 1",
@@ -261,7 +260,6 @@ public class Model {
         this.addEvent(event);
 
         Event sesComp = new Event(
-            admin,
             "SesComp 2023",
             "Semana da Computação 2023",
             "Tecnologia",

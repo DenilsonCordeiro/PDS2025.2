@@ -52,4 +52,13 @@ public class EventRepository implements IEventRepository {
         event_activities.computeIfAbsent(code, k -> new ArrayList<>())
                         .add(activity);
     }
+
+    @Override
+    public List<Activity> listActivities(String code) {
+        List<Activity> activities = event_activities.get(code);
+
+        if(activities.isEmpty()) return List.of();
+
+        return activities;
+    }
 }

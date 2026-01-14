@@ -4,9 +4,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import com.pds.api.DTO.Organizer.AddEventActivityRequest;
 import com.pds.api.DTO.Organizer.AddEventActivityResponse;
 import com.pds.api.DTO.Organizer.AddEventRequest;
 import com.pds.api.DTO.Organizer.AddEventResponse;
+import com.pds.api.DTO.Organizer.GetEventActivitiesResponse;
 import com.pds.api.DTO.Organizer.MyEventsResponse;
 import com.pds.api.Domain.Entities.Activity;
 import com.pds.api.Domain.Entities.Address;
@@ -102,5 +105,23 @@ public class AdminController {
 
         return ResponseEntity.ok()
                              .body(new AddEventActivityResponse("atividade adicionada com sucesso"));
+    }
+
+    @GetMapping("/{eventCode}/event-activities")
+    public ResponseEntity<GetEventActivitiesResponse> GetEventActivities(@PathVariable("eventCode") String eventCode, HttpSession session){
+        String Email = (String) session.getAttribute("USER");
+        String Role = this.autheticate.getRole(Email);
+
+        if(!Role.equals("ADMIN")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                 .body(new GetEventActivitiesResponse(false,
+                                                                      List.of(),
+                                                                      "usuario não autorizado"));
+        }
+
+        List<Activity> activities = this.eventRepository.listActivities(eventCode);
+
+        return ResponseEntity.ok()
+                             .body(new GetEventActivitiesResponse(true, activities, "atividades do evento"));
     }
 }

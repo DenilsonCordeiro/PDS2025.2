@@ -12,4 +12,5 @@ public interface IEventRepository {
     Optional<Event> findByCode(String code);
     List<Event> myEvents(String organizerEmail);
     void addActivity(String code, Activity activity);
+    List<Activity> listActivities(String code);
 }

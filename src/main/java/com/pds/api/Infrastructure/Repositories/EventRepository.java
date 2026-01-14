@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.pds.api.Domain.Entities.Activity;
 import com.pds.api.Domain.Entities.Event;
 import com.pds.api.Domain.IRepositories.IEventRepository;
 
@@ -16,6 +17,7 @@ import com.pds.api.Domain.IRepositories.IEventRepository;
 public class EventRepository implements IEventRepository {
     private final Map<String, Event> events = new HashMap<>();
     private final Map<String, List<String>> organizer_events = new HashMap<>();
+    private final Map<String, List<Activity>> event_activities = new HashMap<>();
 
     @Override
     public void save(Event event, String adminEmail) {
@@ -43,5 +45,11 @@ public class EventRepository implements IEventRepository {
         return codes.stream().map(events::get)
                              .filter(Objects::nonNull)
                              .toList();
+    }
+
+    @Override
+    public void addActivity(String code, Activity activity) {
+        event_activities.computeIfAbsent(code, k -> new ArrayList<>())
+                        .add(activity);
     }
 }

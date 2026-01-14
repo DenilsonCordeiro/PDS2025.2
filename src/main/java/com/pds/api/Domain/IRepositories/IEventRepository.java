@@ -3,6 +3,7 @@ package com.pds.api.Domain.IRepositories;
 import java.util.List;
 import java.util.Optional;
 
+import com.pds.api.Domain.Entities.Activity;
 import com.pds.api.Domain.Entities.Event;
 
 public interface IEventRepository {
@@ -10,4 +11,5 @@ public interface IEventRepository {
     void deleteByCode(String code);
     Optional<Event> findByCode(String code);
     List<Event> myEvents(String organizerEmail);
+    void addActivity(String code, Activity activity);
 }

@@ -12,7 +12,7 @@ public record AddEventRequest(
     String City,
     String State,
     String Street,
-    Integer Number,
+    int Number,
     float Price
 ) {
 }

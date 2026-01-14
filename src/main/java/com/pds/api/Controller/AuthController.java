@@ -16,7 +16,6 @@ import com.pds.api.Application.UseCases.Auth.AuthenticateUser;
 import com.pds.api.DTO.Auth.LoginRequest;
 import com.pds.api.DTO.Auth.LoginResponse;
 import com.pds.api.DTO.Auth.MeResponse;
-import com.pds.api.Domain.Entities.Admin;
 import com.pds.api.Domain.Entities.User;
 import com.pds.api.Domain.IRepositories.IUserRepository;
 
@@ -51,9 +50,7 @@ public class AuthController {
         
         session.setAttribute("USER", user.getEmail());
 
-        String role = (user instanceof Admin) ? "ADMIN" : "PARTICIPANT";
-
-        return ResponseEntity.ok(LoginResponse.success(user.getName(), user.getEmail(), user.getPhone(), role));
+        return ResponseEntity.ok(LoginResponse.success(user.getName(), user.getEmail(), user.getPhone(), user.getRole()));
     }
 
     @GetMapping("/me")

@@ -214,14 +214,16 @@ public class Model {
             "Participante",
             "participante@gmail.com",
             "(12) 34567-8910",
-            "12345678"
+            "12345678",
+            "PARTICIPANT"
         );
 
         Participant joao = new Participant(
             "Joao",
             "joao@gmail.com",
             "(12) 34567-8910",
-            "12345678"
+            "12345678",
+            "PARTICIPANT"
             );
             
         this.addUser(participant);
@@ -231,7 +233,8 @@ public class Model {
             "Admin",
             "admin@gmail.com",
             "(12) 34567-8910",
-            "12345678"
+            "12345678",
+            "ADMIN"
         );
             
         this.addUser(admin);

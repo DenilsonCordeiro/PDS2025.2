@@ -50,6 +50,7 @@ public class UserController {
         user.setEmail(req.Email());
         user.setPhone(req.Phone());
         user.setPassword(req.Password());
+        user.setRole(req.Role());
         
         //retorna usuario
         this.userRepository.save(user);
@@ -58,6 +59,6 @@ public class UserController {
                              .body(RegisterResponse.success(user.getName(),
                                                             user.getEmail(),
                                                             user.getPhone(),
-                                                            req.Role()));
+                                                            user.getRole()));
     }
 }

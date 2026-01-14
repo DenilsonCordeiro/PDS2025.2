@@ -2,9 +2,8 @@ package com.pds.api.Controller;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,15 +34,11 @@ public class AdminController {
 
     @PostMapping("/add-event")
     public ResponseEntity<AddEventResponse> AddEvent(@RequestBody AddEventRequest req, HttpSession session){
-        List<String> Errors = new ArrayList<>();
-
         String Email = (String) session.getAttribute("USER");
         String Role = this.autheticate.getRole(Email);
 
-        if(Role != "ADMIN") Errors.add("- usuario não autorizado");
+        if(!Role.equals("ADMIN")) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AddEventResponse("usuario não autorizado"));
 
-        if(!Errors.isEmpty()) return ResponseEntity.badRequest()
-                                                   .body(new AddEventResponse("Falha ao adicionar evento"));
 
         LocalDate date = req.Date();
         LocalTime time = req.Time();

@@ -4,8 +4,8 @@ public class Participant extends User {
     /*
      * Construtor da classe
      */
-    public Participant(String name, String email, String phone, String password) {
-        super(name, email, phone, password);
+    public Participant(String name, String email, String phone, String password, String role) {
+        super(name, email, phone, password, role);
     }
 
     public Participant() {}

@@ -15,16 +15,18 @@ public abstract class User {
 	protected String email;
 	protected String phone;
 	protected String password;
+	protected String role;
 	protected ArrayList<Event> myEvents = new ArrayList<Event>();
 
 	/*
 	 * Construtor da classe
 	 */
-	public User(String name, String email, String phone, String password) {
+	public User(String name, String email, String phone, String password, String role) {
 		this.setName(name);
 		this.setEmail(email);
 		this.setPhone(phone);
 		this.setPassword(password);
+		this.setRole(role);
 	}
 
 	public User() {}
@@ -32,6 +34,14 @@ public abstract class User {
 	/*
 	 * Getters e setters
 	 */
+
+	public String getRole() {
+		return this.role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 	public String getName() {
 		return name;
 	}

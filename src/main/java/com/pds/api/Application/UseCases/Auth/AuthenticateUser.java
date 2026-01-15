@@ -1,5 +1,5 @@
 package com.pds.api.Application.UseCases.Auth;
-
+import com.pds.api.Utils.IPasswordEncoder;
 
 import java.util.Optional;
 
@@ -11,9 +11,11 @@ import com.pds.api.Domain.IRepositories.IUserRepository;
 @Service
 public class AuthenticateUser {
     private IUserRepository userRepository;
+    private IPasswordEncoder passwordEncoder;
 
-    public AuthenticateUser(IUserRepository userRepository){
+    public AuthenticateUser(IUserRepository userRepository, IPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public boolean checkCredentials(String email, String password){
@@ -23,7 +25,7 @@ public class AuthenticateUser {
         
         User user = EUser.get();
 
-        if(user.getPassword().equals(password)) return true;
+        if(this.passwordEncoder.matches(user.getPassword(), password)) return true;
 
         return false;
     }

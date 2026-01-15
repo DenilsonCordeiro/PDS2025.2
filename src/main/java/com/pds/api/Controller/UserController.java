@@ -1,4 +1,5 @@
 package com.pds.api.Controller;
+import com.pds.api.Utils.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import com.pds.api.Domain.Entities.Participant;
 import com.pds.api.Domain.Entities.User;
 import com.pds.api.Domain.IRepositories.IUserRepository;
 import com.pds.api.Utils.Validator;
+import com.pds.api.Utils.IPasswordEncoder;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -28,9 +30,11 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/users")
 public class UserController {
     private final IUserRepository userRepository;
+    private final IPasswordEncoder passwordEncoder; // <--- Injeção
 
-    public UserController(IUserRepository userRepository){
+    public UserController(IUserRepository userRepository,  IPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
@@ -55,7 +59,7 @@ public class UserController {
         user.setName(req.Name());
         user.setEmail(req.Email());
         user.setPhone(req.Phone());
-        user.setPassword(req.Password());
+        user.setPassword(this.passwordEncoder.encode(req.Password()));
         user.setRole(req.Role());
         
         //retorna usuario

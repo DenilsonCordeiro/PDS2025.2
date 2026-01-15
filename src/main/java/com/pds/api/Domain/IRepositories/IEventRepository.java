@@ -13,4 +13,6 @@ public interface IEventRepository {
     List<Event> myEvents(String organizerEmail);
     void addActivity(String code, Activity activity);
     List<Activity> listActivities(String code);
+    void joinEvent(String code, String email);
+    void leaveEvent(String code, String email);
 }

@@ -18,6 +18,7 @@ public class EventRepository implements IEventRepository {
     private final Map<String, Event> events = new HashMap<>();
     private final Map<String, List<String>> organizer_events = new HashMap<>();
     private final Map<String, List<Activity>> event_activities = new HashMap<>();
+    private final Map<String, List<String>> participant_events = new HashMap<>(); 
 
     @Override
     public void save(Event event, String adminEmail) {
@@ -60,5 +61,16 @@ public class EventRepository implements IEventRepository {
         if(activities.isEmpty()) return List.of();
 
         return activities;
+    }
+
+    @Override
+    public void joinEvent(String code, Parti) {
+        Event event = events.get(code);
+        Participant user = this.user_repos
+
+        if(event == null || email == null) return;
+        else {
+            event.addParticipant()
+        }
     }
 }

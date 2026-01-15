@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,11 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pds.api.DTO.Users.RegisterRequest;
 import com.pds.api.DTO.Users.RegisterResponse;
+import com.pds.api.DTO.Users.UpdateRequest;
+import com.pds.api.DTO.Users.UpdateResponse;
 import com.pds.api.Domain.Entities.Admin;
 import com.pds.api.Domain.Entities.Participant;
 import com.pds.api.Domain.Entities.User;
 import com.pds.api.Domain.IRepositories.IUserRepository;
 import com.pds.api.Utils.Validator;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/users")
@@ -60,5 +66,23 @@ public class UserController {
                                                             user.getEmail(),
                                                             user.getPhone(),
                                                             user.getRole()));
+    }    
+
+    @PatchMapping("/{email}/update")
+    public ResponseEntity<UpdateResponse> Update (@PathVariable String email,
+                                                  @RequestBody UpdateRequest req,
+                                                  HttpSession session){
+        String logedEmail = (String) session.getAttribute("USER");
+        User user = this.userRepository.findByEmail(logedEmail).get();
+        
+        if(req.Name() != null) user.setName(req.Name());
+        if(req.Email() != null) user.setEmail(req.Email());
+        if(req.Phone() != null) user.setPhone(req.Phone());
+        if(req.Password() != null) user.setPassword(req.Password());
+
+        this.userRepository.save(user);
+
+        return ResponseEntity.ok()
+                             .body(new UpdateResponse("atualizado com sucesso"));
     }
 }

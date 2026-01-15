@@ -3,11 +3,13 @@ package com.pds.api.Controller;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,8 +21,11 @@ import com.pds.api.DTO.Organizer.AddEventActivityRequest;
 import com.pds.api.DTO.Organizer.AddEventActivityResponse;
 import com.pds.api.DTO.Organizer.AddEventRequest;
 import com.pds.api.DTO.Organizer.AddEventResponse;
+import com.pds.api.DTO.Organizer.DeleteEventResponse;
 import com.pds.api.DTO.Organizer.GetEventActivitiesResponse;
 import com.pds.api.DTO.Organizer.MyEventsResponse;
+import com.pds.api.DTO.Organizer.UpdateEventRequest;
+import com.pds.api.DTO.Organizer.UpdateEventResponse;
 import com.pds.api.Domain.Entities.Activity;
 import com.pds.api.Domain.Entities.Address;
 import com.pds.api.Domain.Entities.Date;
@@ -124,4 +129,41 @@ public class AdminController {
         return ResponseEntity.ok()
                              .body(new GetEventActivitiesResponse(true, activities, "atividades do evento"));
     }
+
+    @PatchMapping("/{eventCode}/update-event")
+    public ResponseEntity<UpdateEventResponse> UpdateEvent(@PathVariable("eventCode") String eventCode,
+                                                           @RequestBody UpdateEventRequest req, 
+                                                           HttpSession session) {
+
+        Event event = this.eventRepository.findByCode(eventCode).get();
+
+        LocalDate date = req.Date();
+        LocalTime time = req.Time();
+
+        if(req.Name() != null) event.setName(req.Name());
+        if(req.Description() != null) event.setDescription(req.Description());
+        if(req.Category() != null) event.setCategory(req.Category());
+        if(req.Date() != null) event.setDate(new Date(date.getDayOfMonth(), date.getMonthValue(), date.getYear()));
+        if(req.Time() != null) event.setTime(new Time(time.getHour(), time.getMinute()));
+        if(req.City() != null && req.State() != null && req.Street() != null) event.setAddress(new Address(req.State(), req.City(), req.Street(), req.Number()));
+
+        return ResponseEntity.ok()
+                             .body(new UpdateEventResponse("Evento atualizado com sucesso"));
+    }
+
+    @DeleteMapping("/{eventCode}/delete-event")
+    public ResponseEntity<DeleteEventResponse> DeleteEvent(@PathVariable("eventCode") String eventCode,
+                                                           HttpSession session) {
+        Optional<Event> event =  this.eventRepository.findByCode(eventCode);
+
+        if(!event.isPresent()) return ResponseEntity.badRequest().body(new DeleteEventResponse("Evento não encontrado"));
+
+        this.eventRepository.deleteByCode(eventCode);
+
+        return ResponseEntity.ok()
+                             .body(new DeleteEventResponse("Evento deletado com sucesso"));
+    }
+
+    /* @DeleteMapping("/{activityCode}/delete-activity")
+    publi */
 }
